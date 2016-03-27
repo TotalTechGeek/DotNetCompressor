@@ -1,6 +1,6 @@
 ### Welcome
 
-![Imgur](http://i.imgur.com/UUGVWGH.png)
+![Imgur](http://i.imgur.com/7Qpk8RJ.png)
 
 
 This is a small project I took up and completed (for the most part) in one night. 
