@@ -1,0 +1,11 @@
+﻿
+//nothing passed on yet.
+
+try {
+	Assembly.Load(tAppBytes).EntryPoint.Invoke(null, new object[] { args });
+} catch(Exception ex)
+{
+	Assembly.Load(tAppBytes).EntryPoint.Invoke(null, new object[] {});
+}
+
+tAppBytes = null;
