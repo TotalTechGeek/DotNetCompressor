@@ -1,4 +1,4 @@
-### Welcome
+## Welcome
 
 ![Imgur](http://i.imgur.com/7Qpk8RJ.png)
 
