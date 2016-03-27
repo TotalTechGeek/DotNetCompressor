@@ -59,8 +59,29 @@ If you wanted to, you could run a second pass with Gzip over the CompressedProje
 NetCompressor CompressedProject.exe CompressedProject2.exe -gz
 ```
 
+If you wanted to add assembly information to your executable, you can export an empty assembly document to fill in with this command
 
-I will try to add more documentation soon.
+```
+NetCompressor -e Application.txt
+``` 
+(It can be pretty much any name or extension. However, if you type in .dll, it will export the SevenZipSharp dll instead of the assembly document).
+
+After filling it in, you can pass it in while you're compressing your application.
+
+```
+NetCompressor Project.exe Project2.exe -a Application.txt
+```
+
+One thing that needs to be mentioned though, if you don't want the console to pop up with your application, you'll need to add a "-w" flag to your command. Here is an example of a more complex command.
+
+
+```
+NetCompressor Project.exe Project2.exe -a Application.txt -w -i Icon.ico Hello.dll World.dll C.dll
+```
+
+
+There are also a few other features to explore.
+
 
 --------
 
