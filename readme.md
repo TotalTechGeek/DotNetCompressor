@@ -1,9 +1,10 @@
 ### Welcome
 
+![Imgur](http://i.imgur.com/UUGVWGH.png)
+
+
 This is a small project I took up and completed (for the most part) in one night. 
 
-
-![Imgur](http://i.imgur.com/7Qpk8RJ.png)
 
 This program can pack .NET DLLs with executables, and compress them to much smaller sizes. The compression ratios are pretty decent, and seem to outperform competing .NET Packers (especially when you pack the executable with both provided compression algorithms).
 
