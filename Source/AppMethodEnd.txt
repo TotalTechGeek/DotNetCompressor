@@ -1,11 +1,15 @@
 ﻿
 //nothing passed on yet.
 
+var assemb = Assembly.Load(tAppBytes);
+tAppBytes = null; 
+GC.Collect();
+
 try {
-	Assembly.Load(tAppBytes).EntryPoint.Invoke(null, new object[] { args });
+	assemb.EntryPoint.Invoke(null, new object[] { args });
+
 } catch(Exception ex)
 {
-	Assembly.Load(tAppBytes).EntryPoint.Invoke(null, new object[] {});
+	
+	assemb.EntryPoint.Invoke(null, new object[] {});
 }
-
-tAppBytes = null;

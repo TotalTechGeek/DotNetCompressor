@@ -12,7 +12,7 @@ var gStream = new %mode%;
 byte[] tAppBytes = new byte[appSize];
 
 gStream.Read(tAppBytes, 0, appSize);
-
+memStr.Close();
 gStream.Close();
 
 //End Loading App
