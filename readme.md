@@ -26,7 +26,7 @@ GZipCompression is recommended for small files, and LZMA is recommended for larg
 * Rip Icons from the Source Executable for your Final Executable.
 * Supply your own Icons.
 * GZip and LZMA compression.
-* Completely Standalone. 
+* Completely Standalone executables (if desired). 
 * Provide a console message that pops up with the compressed C# Exe. 
 * Easy DLL Merging.
 * Extra commands provided for convenience.
