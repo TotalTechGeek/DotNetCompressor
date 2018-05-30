@@ -5,18 +5,17 @@
 
 This is a small project I took up and completed (for the most part) in one night. 
 
+The code for this project isn't particularly good (again, it was an overnight project), but I've published it because of the utility it provides.
 
 This program can pack .NET DLLs with executables, and compress them to much smaller sizes. The compression ratios are pretty decent, and seem to outperform competing .NET Packers (especially when you pack the executable with both provided compression algorithms).
 
-I created this for my projects that use large libraries that take up a lot of space, and have many dlls. I wanted to reduce the size of the files (if possible), and be able to pack everything into a single standalone exe. 
+I created this for my projects with quite a few libraries. I wanted to reduce the size of the files (if possible), and pack everything into a single standalone exe. 
 
-There were two libraries used to complete this program. 
+SharpCompress and IL-Repack were used to develop this application, which should be automatically downloaded by NuGet.
 
-SevenZipSharp and IL-Repack.
+GZipCompression is recommended for smaller projects, and LZMA is recommended for larger projects (1.2MB+). 
 
-I used IL-Repacks Library Nuget package, and I simply linked in the SevenZipSharp dll. 
-
-GZipCompression is recommended for small files, and LZMA is recommended for larger files. Because LZMA requires an extra dll to be packaged in, you can optionally pack the LZMA executable again to reduce the file size even further (and it gets excellent compression ratios).  
+Because LZMA requires an extra dll to be packaged in, you can optionally pack the LZMA-bundled executable again (with GZip) to reduce the file size even further (and it gets excellent compression ratios).  
 
 ------
 
@@ -45,30 +44,31 @@ NetCompressor
 in the command prompt. 
 
 
-Here's how you'd compress a HelloWorld C# Console Application (it's a small file, so let's use gzip).
+Here's how you'd compress a HelloWorld C# Console Application (use GZip, since it's a smaller project):
 ```
 NetCompressor Hello.exe Hello_compressed.exe -gz
 ```
 
-Here's how you'd compress a larger application with dlls. (Since it's a bigger project, let's use lzma).
+Here's how you'd compress a larger application with dlls, (use lzma):
 
 ```
 NetCompressor BigProject.exe CompressedProject.exe A.dll B.dll C.dll
 ```
 
 
-If you wanted to, you could run a second pass with Gzip over the CompressedProject, and it'd compress further.
+Because of the bundled LZMA Binary, you could run a second pass with GZip over the CompressedProject, and it'd compress further:
 
 ```
 NetCompressor CompressedProject.exe CompressedProject2.exe -gz
 ```
 
-If you wanted to add assembly information to your executable, you can export an empty assembly document to fill in with this command
+If you wanted to add assembly information to your executable, you can export an empty assembly document to fill in with this command:
 
 ```
 NetCompressor -e Application.txt
 ``` 
-(It can be pretty much any name or extension. However, if you type in .dll, it will export the SevenZipSharp dll instead of the assembly document).
+
+(It can be pretty much any name or extension. However, if you type in .dll, it will export the SharpCompress dll instead of the assembly document).
 
 After filling it in, you can pass it in while you're compressing your application.
 
@@ -97,10 +97,10 @@ Check the releases tab, my releases will be packed with this application.
 
 ### Compilation Instructions
 
-Download SevenZipSharp.dll from somewhere. There might be a NuGet package for it. Add it to your project references.
+Open the Project Solution. Build.
 
-Install the NuGet package for IL-Repack (Library). 
+--- 
 
-Plug the source code into your project, as well as the txt files (put them into the Properties/Resources, along with the SevenZipSharp.dll file).
+### Todo
 
-I will try to provide a full VS setup soon. I need to clean up my project first though.  
+The SharpCompress binary is ironically rather large. I will need to fork the project and produce slimmer builds. The larger binary is restricting LZMA from completely overtaking GZip. *(Added 5/29/2018)*
