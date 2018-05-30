@@ -5,7 +5,7 @@
 
 This is a small project I took up and completed (for the most part) in one night. 
 
-The code for this project isn't particularly good (again, it was an overnight project), but I've published it because of the utility it provides.
+The underlying code for this project isn't particularly good, but I've published it because of the utility it provides.
 
 This program can pack .NET DLLs with executables, and compress them to much smaller sizes. The compression ratios are pretty decent, and seem to outperform competing .NET Packers (especially when you pack the executable with both provided compression algorithms).
 
