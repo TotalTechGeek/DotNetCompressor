@@ -10,14 +10,13 @@ using System.IO.Compression;
 using System.Reflection;
 using System.Resources;
 using System.Text;
-using System.Threading;
 
 namespace NetCompressor
 {
-
-
     class Program
     {
+        const string EXTERNAL_COMPRESSOR = "SharpCompress";
+
         //special flags that are program wide.
         private static bool flaggedSevenZipForDeletion;
         private static string appToBeCompressed;
@@ -46,15 +45,15 @@ namespace NetCompressor
             FileStream stream2 = File.OpenRead(outputFile + "_temp");
 
             //sets the mode to follow when it generates the code. It swaps between G-Zip and LZMA.
-            string mode = "SevenZip.LzmaDecodeStream(memStr)";
+            string mode;
             long appSize = stream2.Length;
             Stream gStream = null;
-
-           
+            
             if(gzOr7z)
             {
-                //lzma
-                gStream = new SevenZip.LzmaEncodeStream(stream);
+                // lzipstream
+                gStream = new SharpCompress.Compressors.LZMA.LZipStream(stream, SharpCompress.Compressors.CompressionMode.Compress);
+                mode = "SharpCompress.Compressors.LZMA.LZipStream(memStr, SharpCompress.Compressors.CompressionMode.Decompress)";
             }
             else
             {
@@ -285,18 +284,18 @@ namespace NetCompressor
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler((s, a) =>
             {
                 
-                if(a.Name.Substring(0, a.Name.IndexOf(",")) == "SevenZipSharp")
+                if(a.Name.Substring(0, a.Name.IndexOf(",")) == EXTERNAL_COMPRESSOR)
                 {
 
                     //If the file exists, it doesn't need to be spit out, but if it doesn't, put the file in the directory, and flag it for deletion afterwards.
-                    if (!File.Exists(Directory.GetCurrentDirectory() + "\\SevenZipSharp.dll"))
+                    if (!File.Exists(Directory.GetCurrentDirectory() + "\\" + EXTERNAL_COMPRESSOR  + ".dll"))
                     {
                         flaggedSevenZipForDeletion = true;
-                        File.WriteAllBytes(Directory.GetCurrentDirectory() + "\\SevenZipSharp.dll", (byte[])manager.GetObject("SevenZipSharp"));
+                        File.WriteAllBytes(Directory.GetCurrentDirectory() + "\\" + EXTERNAL_COMPRESSOR + ".dll", (byte[])manager.GetObject(EXTERNAL_COMPRESSOR));
                         
 
                     }
-                    return Assembly.LoadFile(Directory.GetCurrentDirectory() + "\\SevenZipSharp.dll");
+                    return Assembly.LoadFile(Directory.GetCurrentDirectory() + "\\"+ EXTERNAL_COMPRESSOR + ".dll");
                 }
 
 
@@ -354,7 +353,7 @@ namespace NetCompressor
                     //if the extension is a dll, then export the SevenZipSharp file.
                     if (export && word.EndsWith(".dll"))
                     {
-                        File.WriteAllBytes(word, (byte[])manager.GetObject("SevenZipSharp"));
+                        File.WriteAllBytes(word, (byte[])manager.GetObject(EXTERNAL_COMPRESSOR));
                         return;
                     }
                     //otherwise export the blank assembly file.
@@ -433,7 +432,7 @@ namespace NetCompressor
                     }
                     else // otherwise, just assume it is a dll file.
                     {
-                        dllInstructions.Add(word.Trim());
+                        dllInstructions.Add("" + word.Trim() + "");
                     }
 
 
@@ -485,7 +484,7 @@ namespace NetCompressor
 
                     //if lzma compression, then add the SevenZipSharp dll as a requirement.
                     if (gzOr7z)
-                    parameters.ReferencedAssemblies.Add("SevenZipSharp.dll");
+                    parameters.ReferencedAssemblies.Add(EXTERNAL_COMPRESSOR + ".dll");
 
 
                     //check icon flags.
@@ -528,7 +527,7 @@ namespace NetCompressor
                         dllInstructions.Clear(); 
                         dllInstructions.Add("/out:" + outputFile + "");
                         dllInstructions.Add(outputFile + "_temp");
-                        dllInstructions.Add("SevenZipSharp.dll");
+                        dllInstructions.Add(EXTERNAL_COMPRESSOR + ".dll");
                         
                         new ILRepacking.ILRepack(new ILRepacking.RepackOptions(new ILRepacking.CommandLine(dllInstructions))).Repack();
                        
@@ -570,7 +569,7 @@ namespace NetCompressor
                     if (flaggedSevenZipForDeletion)
                     {
                         //ping something random, give it a timeout, bam.
-                        ProcessStartInfo info = new ProcessStartInfo("cmd.exe", "/C ping 1.1.1.1 -n 1 -w 250 > Nul & Del " + "SevenZipSharp.dll");
+                        ProcessStartInfo info = new ProcessStartInfo("cmd.exe", "/C ping 1.1.1.1 -n 1 -w 250 > Nul & Del " + EXTERNAL_COMPRESSOR + ".dll");
                         
                         //make this process invisible.
                         info.CreateNoWindow = true;
