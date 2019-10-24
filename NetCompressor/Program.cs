@@ -506,7 +506,7 @@ namespace NetCompressor
                             SaveAsIcon(new Bitmap(iconBitmapFromExe, new Size((int)(iconBitmapFromExe.Size.Width * 1.0f), (int)(iconBitmapFromExe.Size.Height * 1.0f))), appToBeCompressed + "icon.ico");
                             
                             //set it to use that icon.
-                            parameters.CompilerOptions += " /win32icon:" + Directory.GetCurrentDirectory() + "\\" + appToBeCompressed + "icon.ico";
+                            parameters.CompilerOptions += " /win32icon:" + appToBeCompressed + "icon.ico";
                         }
                     }
 
